@@ -16,7 +16,6 @@ class phpVBoxConfig {
 
 var $username = null;
 var $password = null;
-
 var $location = null;
 
 var $language = 'en';
@@ -26,6 +25,9 @@ var $vrdeports = '9000-9100';
 
 // Disable authentication
 var $noAuth = false;
+
+// Increased timeout is needed for large amount of virtual machines
+var $eventListenerTimeout = 500;
 
 // Host / ip to use for console connections
 #var $consoleHost = '192.168.1.40';
