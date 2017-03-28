@@ -1,15 +1,16 @@
-FROM richarvey/nginx-php-fpm
+FROM php:7.0-apache
 MAINTAINER Keijo Kapp <keijo.kapp@gmail.com>
 
-RUN curl https://codeload.github.com/imoore76/phpvirtualbox/tar.gz/5.0-5 -o phpvirtualbox-5.0-5.tar && \
-	tar -xzf phpvirtualbox-5.0-5.tar && \
-	mv phpvirtualbox-5.0-5 /var/www
+RUN apt-get update && apt-get install libxml2-dev && \
+	docker-php-ext-install soap && \
+	rm -rf /var/lib/apt/lists/*
 
-ADD config.php /var/www/phpvirtualbox-5.0-5/
+RUN curl https://codeload.github.com/ezraholm50/phpvirtualbox/tar.gz/master -o /tmp/phpvirtualbox.tar.gz && \
+	tar -xzf /tmp/phpvirtualbox.tar.gz -C /tmp && \
+	rm -rf /var/www/html && mv /tmp/phpvirtualbox-master /var/www/html && \
+	rm /tmp/phpvirtualbox.tar.gz
 
-ADD phpvirtualbox.nginx.conf /etc/nginx/sites-available/phpvirtualbox
-RUN ln -s /etc/nginx/sites-available/phpvirtualbox /etc/nginx/sites-enabled/phpvirtualbox
-RUN rm /etc/nginx/sites-enabled/default.conf
+ADD config.php /var/www/html
 
-WORKDIR /var/www/phpvirtualbox-5.0-5
+WORKDIR /var/www/html
 EXPOSE 80
